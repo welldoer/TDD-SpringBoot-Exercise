@@ -17,5 +17,5 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script:
-  - gradle check
+  - ./gradlew check
   - sonar-scanner
