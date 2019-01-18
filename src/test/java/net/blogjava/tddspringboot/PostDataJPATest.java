@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -21,6 +22,8 @@ public class PostDataJPATest {
 	private TestEntityManager entityManager;
 
 	@Autowired
+	private PostRepository repository;
+	@Autowired
 	private DataSource dataSource;
 	
 	@Test
@@ -30,6 +33,15 @@ public class PostDataJPATest {
 		Object id = entityManager.getId( post );
 		Post found = entityManager.find( Post.class, id );
 		assertThat( found.getUsername() ).isEqualTo( "shawn" );
+	}
+	
+	@Test
+	public void testRepository() {
+		entityManager.persist( new Post( "spring", "bob" ) );
+		entityManager.persist( new Post( "boot", "Tom" ) );
+		entityManager.flush();
+		Post found = repository.findByContent("spring");
+		assertThat( found.getUsername() ).isEqualTo( "bob" );
 	}
 	
 	@Test
