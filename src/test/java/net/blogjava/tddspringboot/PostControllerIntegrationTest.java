@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,6 @@ public class PostControllerIntegrationTest {
 
 	@Test
 	public void testSentValidPostRequest() throws Exception {
-		assertThat( mockMvc ).isNotNull();
-		
 		ResultActions resultActions = mockMvc.perform(
 				post("/v2/posts")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -40,12 +40,16 @@ public class PostControllerIntegrationTest {
 				);
 		resultActions.andDo(print())
 				.andExpect(status().isCreated());
-//		String response = resultActions
-//				.andReturn()
-//				.getResponse()
-//				.getContentAsString();
+		String response = resultActions
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		Post result = objectMapper.readValue(response, Post.class);
 		
-		assertThat( resultActions ).isNotNull();
+		assertThat(result.getId()).isEqualTo(1);
+		assertThat(result.getContent()).isEqualTo("post content test");
+		assertThat(result.getUsername()).isEqualTo("Micky");
+		assertThat(result.getCreateDate()).isCloseTo(new Date(), 300);
 	}
 
 }
