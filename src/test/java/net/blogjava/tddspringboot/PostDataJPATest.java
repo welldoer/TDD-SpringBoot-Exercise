@@ -24,6 +24,15 @@ public class PostDataJPATest {
 	private DataSource dataSource;
 	
 	@Test
+	public void testEntityManager() {
+		Post post = entityManager.persist( new Post("Great news!","shawn"));
+		entityManager.flush();
+		Object id = entityManager.getId( post );
+		Post found = entityManager.find( Post.class, id );
+		assertThat( found.getUsername() ).isEqualTo( "shawn" );
+	}
+	
+	@Test
 	public void test() throws SQLException {
 		String productName = dataSource.getConnection().getMetaData().getDatabaseProductName();
 		assertThat( productName ).isEqualTo("H2");
