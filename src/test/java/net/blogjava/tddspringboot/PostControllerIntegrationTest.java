@@ -2,6 +2,7 @@ package net.blogjava.tddspringboot;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +51,25 @@ public class PostControllerIntegrationTest {
 		assertThat(result.getContent()).isEqualTo("post content test");
 		assertThat(result.getUsername()).isEqualTo("Micky");
 		assertThat(result.getCreateDate()).isCloseTo(new Date(), 300);
+		
 	}
 
+	@Test
+	public void testSentValidPostRequestAndQuery() throws Exception {
+		ResultActions resultActions0 = mockMvc.perform(
+				post("/v2/posts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new PostDTO("post content abc")))
+				);
+		resultActions0.andDo(print())
+				.andExpect(status().isCreated());
+
+		ResultActions resultActions = mockMvc.perform(
+				get("/v2/posts/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(1))
+				);
+		resultActions.andDo(print())
+				.andExpect(status().isOk());
+	}
 }
