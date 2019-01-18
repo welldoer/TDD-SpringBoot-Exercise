@@ -1,6 +1,6 @@
 # TDD-SpringBoot-Exercise
 
-复刻 TDD 经典案例
+学习 Spring Boot TDD 开发
 
 [![Build Status](https://travis-ci.com/welldoer/TDD-SpringBoot-Exercise.svg?branch=master)](https://travis-ci.com/welldoer/TDD-SpringBoot-Exercise)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=welldoer_TDD-SpringBoot-Exercise&metric=coverage)](https://sonarcloud.io/dashboard?id=welldoer_TDD-SpringBoot-Exercise)
@@ -18,6 +18,10 @@
 
 ~~4. 通过 curl 方式来运行 Spring Boot Initializr，获取框架代码~~
 
-5. 
+5. 尝试初步编写简单的集成测试，第一步仅引用 MockMvc
+
+6. 尝试以 Post 方式模拟请求，其中请求数据对象要求 JSON 化
+
+ 
 
 
