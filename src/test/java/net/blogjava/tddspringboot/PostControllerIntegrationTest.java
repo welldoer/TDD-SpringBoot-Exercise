@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,6 +25,9 @@ public class PostControllerIntegrationTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	public void testSentValidPostRequest() throws Exception {
@@ -30,9 +36,15 @@ public class PostControllerIntegrationTest {
 		ResultActions resultActions = mockMvc.perform(
 				post("/v2/posts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{}")
+				.content(objectMapper.writeValueAsString(new PostDTO("post content test")))
 				);
-		resultActions.andDo(print());
+		resultActions.andDo(print())
+				.andExpect(status().isCreated());
+//		String response = resultActions
+//				.andReturn()
+//				.getResponse()
+//				.getContentAsString();
+		
 		assertThat( resultActions ).isNotNull();
 	}
 
